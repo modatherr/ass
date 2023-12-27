@@ -1,0 +1,510 @@
+1. (C * B + C) using 8-bit registers:
+
+section .text
+global main
+
+main:
+    
+    ; c*b +c
+    mov al , [c]
+    mov bl , [b]
+    mul bl
+    add al , [c]
+    
+    ret
+    section .data
+    c db 9
+    b db 3
+
+
+2. (C + B * C) using 16-bit registers:
+
+
+section .text
+global main
+
+main:
+    mov ax, [c] ; Load C into AX
+    mov bx, [b] ; Load B into BX
+    mul bx      ; AX = AX * BX (C*B)
+    add ax, [c] ; AX = AX + C (C + B*C)
+    
+    ret
+    
+section .data
+    c dw 9      ; Define C as a word (16-bit)
+    b dw 3      ; Define B as a word (16-bit)
+
+
+3. Subtracting three integers using 16-bit registers:
+
+
+section .text
+global main
+
+main:
+    mov ax, 0FF2Ah ; Load FF2A into AX
+    sub ax, 4510h  ; Subtract 4510h from AX
+    sub ax, 56B1h  ; Subtract 56B1h from AX
+    
+    ret
+
+
+
+
+4. (A / B) using 8-bit registers:
+
+
+section .text
+global main
+
+main:
+    mov al, 17h ; Load A (17h) into AL
+    mov bl, 2   ; Load B (2) into BL
+    div bl      ; AL = AL / BL (A/B)
+    
+    ret
+
+
+
+5. Setting AL to B5h, copying AX to BX, and adding 1001_1101b to BL:
+
+
+
+section .text
+global main
+
+main:
+    mov al, 0B5h ; Set AL to B5h
+    mov ah, al   ; Copy AL to AH
+    mov bx, ax   ; Copy AX to BX
+    mov bl, 0Dh  ; Load BL with 0Dh (binary 1101)
+    add bl, 99   ; Add BL to 1001_1101b
+    
+    ret
+
+
+6. (C - B * C) using 8-bit registers:
+
+section .text
+global main
+
+main:
+    mov al, [c] ; Load C into AL
+    mov bl, [b] ; Load B into BL
+    mul bl      ; AL = AL * BL (C*B)
+    sub al, bl  ; AL = AL - B (C - B*C)
+    
+    ret
+    
+section .data
+    c db 9      ; Define C as a byte (8-bit)
+    b db 3      ; Define B as a byte (8-bit)
+
+
+
+7. Multiplying 13h by 2h:
+
+section .text
+global main
+
+main:
+    mov al, 13h ; Load 13h into AL
+    mov bl, 2h  ; Load 2h into BL
+    mul bl      ; AL = AL * BL (13h * 2h)
+    
+    ; Add code to print the result stored in AL (converted to a readable format)
+    
+    ret
+
+8. Multiplying 17h by 3h:
+
+section .text
+global main
+
+main:
+    mov ax, 17h ; Load 17h into AX
+    mov bx, 3h  ; Load 3h into BX
+    mul bx      ; AX = AX * BX (17h * 3h)
+    
+    ; Add code to print the result stored in AX (converted to a readable format)
+    
+    ret
+
+
+9. Multiplying 17h by 2^4:
+
+section .text
+global main
+
+main:
+    mov ax, 17h ; Load 17h into AX
+    mov bx, 24h ; Load 24h into BX
+    mul bx      ; AX = AX * BX (17h * 24h)
+    
+    ; Add code to print the result stored in AX (converted to a readable format)
+    
+    ret
+
+
+
+10 -
+section .text
+global main
+
+main:
+    mov ax, 17h ; Load 17h into AX
+    mov bl, 22h ; Load 22h into BL
+    div bl      ; AL = AX / BL (17h / 22h)
+    
+    ; Add code to print the result stored in AL (converted to a readable format)
+    
+    ret
+
+29-Write an assembly program that take from user 10 numbers and print 
+the maximum one.
+
+section .text
+global main
+extern io_print_hex
+extern io_get_dec
+main:
+    mov ebp, esp
+    mov ebp, esp ; for correct debugging
+    mov eax, 0
+    mov ebx, 0
+    mov ecx, 0
+    mov edx, 0
+    
+    mov ecx , 0ah
+    mov esi , 0
+    l1:
+       mov [c] , ecx
+       call io_get_dec
+       mov [grades+esi],al
+       inc esi
+       mov ecx , [c]
+       loop l1
+    
+    
+
+    MOV ecx, 0ah
+    MOV esi , 0
+L1: MOV AL , [grades+esi]
+L2: MOV BL , [grades+esi]
+    CMP BL , AL
+    ja L1
+    INC ESI
+    LOOP L2
+    MOV [highest] , AL
+    call io_print_hex
+    
+    
+    ret
+
+section .data
+grades DB 10 dup(0)
+highest DB 0  ; Initialize the highest variable to 0
+c dd 0
+
+
+30-Write an assembly program that take from user 10 numbers and print 
+the minimum one
+
+
+section .text
+global main
+extern io_print_hex
+extern io_get_dec
+main:
+    mov ebp, esp
+    mov ebp, esp ; for correct debugging
+    mov eax, 0
+    mov ebx, 0
+    mov ecx, 0
+    mov edx, 0
+    
+    mov ecx , 0ah
+    mov esi , 0
+    l1:
+       mov [c] , ecx
+       call io_get_dec
+       mov [grades+esi],al
+       inc esi
+       mov ecx , [c]
+       loop l1
+    
+    
+
+    MOV ecx, 0ah
+    MOV esi , 0
+L1: MOV AL , [grades+esi]
+L2: MOV BL , [grades+esi]
+    CMP AL , BL
+    ja L1
+    INC ESI
+    LOOP L2
+    MOV [highest] , AL
+    call io_print_hex
+    
+    
+    ret
+
+section .data
+grades DB 10 dup(0)
+highest DB 0  ; Initialize the highest variable to 0
+c dd 0
+
+
+
+17-Write an assembly program that get from user 1 number and print if it 
+divisible by 3 or not
+
+
+section .data
+msg1 db "devisible by 3 ",0
+msg2 db "not devisible by 3 ",0
+msg db "please write number: ",0
+c dd 1
+n db 3
+section .text
+global main
+extern io_get_dec
+extern io_print_string
+extern io_newline
+main:
+    mov ecx,[c]
+    L1:
+    mov [c],ecx
+    mov eax,msg
+    call print
+    call input
+    div byte[n]
+    cmp ah,0
+    je divisible
+    mov eax,msg2
+   call print
+    divisible:
+    mov eax,msg1
+    call print
+    mov ecx,[c]
+    loop L1
+    ret
+    input:
+    call io_get_dec
+    ret
+    print:
+    call io_print_string
+    call io_newline
+    ret
+
+
+
+
+18-Write an assembly program that get from user 1 number and print if it 
+divisible by 7 or not 
+
+
+section .data
+msg1 db "devisible by 7 ",0
+msg2 db "not devisible by 7 ",0
+msg db "please write number: ",0
+c dd 1
+n db 7
+section .text
+global main
+extern io_get_dec
+extern io_print_string
+extern io_newline
+main:
+    mov ecx,[c]
+    L1:
+    mov [c],ecx
+    mov eax,msg
+    call print
+    call input
+    div byte[n]
+    cmp ah,0
+    je divisible
+    mov eax,msg2
+   call print
+    divisible:
+    mov eax,msg1
+    call print
+    mov ecx,[c]
+    loop L1
+    ret
+    input:
+    call io_get_dec
+    ret
+    print:
+    call io_print_string
+    call io_newline
+    ret
+
+
+
+27.Write an assembly program that take from user 10 numbers and print 
+sum of them.
+
+section .data
+msg1 db "sum ",0
+;msg2 db "average ",0
+msg db "please write number: ",0
+c dd 10
+s dd 0
+
+section .text
+global main
+extern io_get_dec
+extern io_print_string
+extern io_print_dec
+extern io_newline
+main:
+    mov ebp, esp; for correct debugging
+    mov ecx,[c]
+    L1:
+    mov [c],ecx
+    mov eax,msg
+    call print
+    call input
+    add [s],ax
+    mov ecx,[c]
+    loop L1
+    mov eax,msg1
+    call print
+    mov eax,[s]
+    call io_print_dec
+ret
+    input:
+    call io_get_dec
+    ret
+    print:
+    call io_print_string
+    call io_newline
+    ret
+
+
+28-Write an assembly program that take from user 10 numbers and print 
+average of them
+
+
+
+section .data
+msg2 db "average ",0
+msg db "please write number: ",0
+c dd 10
+
+
+section .text
+global main
+extern io_get_dec
+extern io_print_string
+extern io_print_dec
+extern io_newline
+main:
+    mov ebp, esp; for correct debugging
+    mov ecx,[c]
+    L1:
+    mov [c],ecx
+    
+     mov eax,msg2
+    call print
+    mov ax,[s]
+    mov dx,0
+    mov byte[c],10
+    div byte[c]
+    mov bl,al
+    mov eax,0
+    mov al,bl
+    call io_print_dec
+    ret
+    input:
+    call io_get_dec
+    ret
+    print:
+    call io_print_string
+    call io_newline
+    ret
+
+
+
+
+
+
+26.Create an array from five element and sum all element of array in BX 
+register.
+
+
+section .data
+arr db 12,14 25,36,45
+s db 0
+c dd 5
+msg1 db "sum ",0
+msg2 db "average ",0
+section .text
+global main
+extern io_print_string
+extern io_print_dec
+extern io_newline
+main:
+    mov ebp, esp; for correct debugging
+    ;write your code here
+    mov esi,arr
+    mov ecx,[c]
+    sum:
+    mov bl,[esi]
+    add [s],bl
+    inc esi
+    loop sum
+     mov eax,msg1
+    call print
+     mov eax,0
+     mov al,[s]
+    call io_print_dec
+     mov eax,msg2
+    call print
+    mov eax,0
+     mov al,[s]
+    mov byte[c],5
+    div byte[c]
+    mov bl,al
+    mov eax,0
+    mov al,bl
+    call io_print_dec
+    ret
+    print:
+    call io_print_string
+    call io_newline
+    ret
+
+
+25-Create an array from five element and reverse an array using Stack.
+
+section .data
+x dw 10h,30h,50h,70h
+section .text
+global main
+main:
+    mov ebp, esp; for correct debugging
+    mov ecx,4
+    mov esi,0
+    jmp copy
+pop ebp 
+   ret 
+copy:
+mov ax ,[x+esi]
+push ax
+add esi,2
+loop copy 
+      mov ecx ,4
+      mov esi ,0
+get:
+pop ax 
+mov [x+esi] ,ax 
+add esi,2
+loop get
+ret
+
+
+
